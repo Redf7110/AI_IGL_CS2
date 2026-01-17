@@ -2,7 +2,7 @@ console.log('MAIN PROCESS STARTED')
 import { app, BrowserWindow, globalShortcut } from "electron"
 import path from "path"
 import { captureScreen, getLatestImages } from "./capture"
-
+//oneedit
 let win: BrowserWindow | null = null
 
 app.whenReady().then(() => {
