@@ -1,12 +1,14 @@
-console.log('MAIN PROCESS STARTED')
-import { app, BrowserWindow, globalShortcut } from "electron"
+import { app, BrowserWindow } from "electron"
 import path from "path"
-import { captureScreen, getLatestImages } from "./capture"
-//oneedit
+import { fileURLToPath } from "url"
+import "./ipc"
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
 let win: BrowserWindow | null = null
 
-app.whenReady().then(() => {
-  console.log('APP READY')
+function createWindow() {
   win = new BrowserWindow({
     width: 900,
     height: 600,
@@ -15,27 +17,13 @@ app.whenReady().then(() => {
     }
   })
 
-  //✅Load React (Vite in dev)
-  //if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
-   // win.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL)
-  //} else {
-  //  win.loadFile("dist/index.html")
-  //}
-  win.loadFile(path.join(__dirname, "../renderer/index.html"))
-  // ✅ Screenshot loop
-  setInterval(() => {
-    console.log('INTERNAL TICK')
-    captureScreen()
-  }, 3000)
+  // 🔥 FORCE DEV SERVER (electron-vite v5 safe)
+  if (!app.isPackaged) {
+    console.log("Loading DEV server http://localhost:5173")
+    win.loadURL("http://localhost:5173")
+  } else {
+    win.loadFile(path.join(__dirname, "../renderer/index.html"))
+  }
+}
 
-  // ✅ Keybind
-  globalShortcut.register("CommandOrControl+V", () => {
-    const imgs = getLatestImages(3)
-    console.log("Triggered with images:", imgs)
-    win?.webContents.send("replay-triggered", imgs)
-  })
-})
-
-app.on("will-quit", () => {
-  globalShortcut.unregisterAll()
-})
+app.whenReady().then(createWindow)

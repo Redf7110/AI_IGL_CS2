@@ -1,16 +1,25 @@
-import { resolve } from 'path'
-import { defineConfig } from 'electron-vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from "electron-vite"
+import react from "@vitejs/plugin-react"
+import path from "path"
 
 export default defineConfig({
-  main: {},
-  preload: {},
+  main: {
+    entry: "src/main/index.ts"
+  },
+
+  preload: {
+    entry: "src/preload/index.ts"
+  },
+
   renderer: {
-    resolve: {
-      alias: {
-        '@renderer': resolve('src/renderer/src')
-      }
+    root: "src/renderer",
+    plugins: [react()],
+    build: {
+      outDir: "../../out/renderer"
     },
-    plugins: [react()]
+    server: {
+      port: 5173,
+      strictPort: true
+    }
   }
 })
