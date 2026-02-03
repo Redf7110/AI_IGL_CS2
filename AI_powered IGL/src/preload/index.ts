@@ -1,5 +1,9 @@
 import { contextBridge, ipcRenderer } from "electron"
 
 contextBridge.exposeInMainWorld("api", {
-  ping: () => ipcRenderer.invoke("ping")
+  ping: () => ipcRenderer.invoke("ping"),
+
+  onMinimapUpdate: (cb: (img: string) => void) => {
+    ipcRenderer.on("minimap-update", (_, img) => cb(img))
+  }
 })

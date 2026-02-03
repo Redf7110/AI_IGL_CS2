@@ -2,6 +2,7 @@ import { app, BrowserWindow } from "electron"
 import path from "path"
 import { fileURLToPath } from "url"
 import "./ipc"
+import { startMinimapLoop } from "./capture/loop"
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -26,4 +27,14 @@ function createWindow() {
   }
 }
 
-app.whenReady().then(createWindow)
+app.whenReady().then(() => {
+  createWindow()
+
+  //start auto minimap capture loop (every 3s)
+  if (win) {
+    startMinimapLoop(win,3000)
+  }
+
+})
+
+
