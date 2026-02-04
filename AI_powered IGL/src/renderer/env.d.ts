@@ -5,7 +5,7 @@ declare global{
     api: {
       ping: () => Promise<string>
       onMinimapUpdate: (cb: (img: string) => void) => void
-      getAudioSource: () => Promise<string>
+      getDesktopSourceId: () => Promise<string>
     }
   }
 }

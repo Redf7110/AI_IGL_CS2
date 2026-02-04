@@ -1,15 +1,24 @@
 let buffer: Float32Array[] = []
-
-export function startAudioLoop(onChunk: (buf: Float32Array) => void) {
-  setInterval(() => {
-    if (!buffer.length) return
-
-    const merged = Float32Array.from(buffer.flatMap(b => Array.from(b)))
-    buffer = []
-    onChunk(merged)
-  }, 3000)
-}
+let timer: number | null = null
 
 export function pushAudio(data: Float32Array) {
   buffer.push(data)
+}
+
+export function startAudioLoop(
+  onChunk: (chunk: Float32Array) => void,
+  ms = 3000
+) {
+  if (timer !== null) return
+
+  timer = window.setInterval(() => {
+    if (!buffer.length) return
+
+    const merged = Float32Array.from(
+      buffer.flatMap(b => Array.from(b))
+    )
+
+    buffer = []
+    onChunk(merged)
+  }, ms)
 }

@@ -7,7 +7,7 @@ ipcMain.handle("get-minimap", async () => {
   const minimap = await cropMinimap(screen)
   return minimap.toString("base64")
 })
-ipcMain.handle("get-audio-source", async () => {
+ipcMain.handle("get-desktop-source-id", async () => {
   const sources = await desktopCapturer.getSources({
     types: ["screen"]
   })

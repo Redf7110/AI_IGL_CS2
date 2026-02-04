@@ -2,13 +2,15 @@ import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
 import App from "./App"
 
-const container = document.getElementById("root")
+console.log("main.tsx loaded")
 
-if (!container) {
-  throw new Error("Root container missing in index.html")
+const root = document.getElementById("root")
+
+if (!root) {
+  throw new Error("Root element not found")
 }
 
-createRoot(container).render(
+createRoot(root).render(
   <StrictMode>
     <App />
   </StrictMode>

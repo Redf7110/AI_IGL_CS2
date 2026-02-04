@@ -1,6 +1,5 @@
 import { defineConfig } from "electron-vite"
 import react from "@vitejs/plugin-react"
-import path from "path"
 
 export default defineConfig({
   main: {
@@ -14,12 +13,12 @@ export default defineConfig({
   renderer: {
     root: "src/renderer",
     plugins: [react()],
-    build: {
-      outDir: "../../out/renderer"
-    },
     server: {
       port: 5173,
       strictPort: true
+    },
+    build: {
+      outDir: "../../out/renderer"
     }
   }
 })
