@@ -6,9 +6,8 @@ contextBridge.exposeInMainWorld("api", {
   onMinimapUpdate: (cb: (img: string) => void) => {
     ipcRenderer.on("minimap-update", (_, img) => cb(img))
   },
-  getDesktopSourceId: () => 
-    ipcRenderer.invoke("get-desktop-source-id")
-
+  saveAudioClip: (data: ArrayBuffer, mimeType?: string) =>
+    ipcRenderer.invoke("save-audio-clip", { data, mimeType })
 })
 
 

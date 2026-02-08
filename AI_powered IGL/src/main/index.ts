@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from "electron"
+import { app, BrowserWindow, desktopCapturer, dialog, session } from "electron"
 import path from "path"
 import { fileURLToPath } from "url"
 import "./ipc"
@@ -28,6 +28,39 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
+  session.defaultSession.setDisplayMediaRequestHandler(
+    async (_request, callback) => {
+      const sources = await desktopCapturer.getSources({
+        types: ["screen", "window"]
+      })
+
+      if (!sources.length) {
+        callback({})
+        return
+      }
+
+      const { response } = await dialog.showMessageBox({
+        type: "question",
+        title: "Select a screen or window",
+        message: "Choose what to share",
+        buttons: sources.map((source) => source.name),
+        cancelId: -1,
+        noLink: true
+      })
+
+      const source = sources[response]
+      if (!source) {
+        callback({})
+        return
+      }
+
+      callback({
+        video: source,
+        audio: "loopback"
+      })
+    }
+  )
+
   createWindow()
 
   //start auto minimap capture loop (every 3s)
