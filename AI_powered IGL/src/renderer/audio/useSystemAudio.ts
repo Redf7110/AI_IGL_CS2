@@ -11,9 +11,12 @@ export async function startSystemAudio(
       audio: true
     })
 
-    const [videoTrack] = stream.getVideoTracks()
-    if (videoTrack) {
-      videoTrack.stop()
+    //const [videoTrack] = stream.getVideoTracks()
+    //if (videoTrack) {
+    //  videoTrack.stop()
+    //}
+    if (!stream.getAudioTracks().length){
+      throw new Error("No system audio track. Choose full screen capture (not window).")
     }
   } catch (err) {
     const error = err as Error

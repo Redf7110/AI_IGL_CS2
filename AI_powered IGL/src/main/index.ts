@@ -31,7 +31,7 @@ app.whenReady().then(() => {
   session.defaultSession.setDisplayMediaRequestHandler(
     async (_request, callback) => {
       const sources = await desktopCapturer.getSources({
-        types: ["screen", "window"]
+        types: ["screen"]
       })
 
       if (!sources.length) {
